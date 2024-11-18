@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FCM with Thymeleaf</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+</head>
+<body>
+
+<h1>FCM Example with Thymeleaf</h1>
+
+<!-- FCM 토큰을 출력할 곳 -->
+<p><b>FCM Token : </b></p>
+<div id="fcmToken" style="word-wrap: break-word; max-width: 100%; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+    토큰을 가져오는 중...
+</div>
+<p><b>알림 제목 : </b></p>
+<div id="pushTitle" style="word-wrap: break-word; max-width: 100%; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+    제목 ~
+</div>
+<p><b>알림 내용 : </b></p>
+<div id="pushBody" style="word-wrap: break-word; max-width: 100%; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+    내용 ~
+</div>
+
+<script>
+    // Firebase 설정
+    const firebaseConfig = {
+        apiKey: "AIzaSyDbzw5ORuEH_FJxzruVj3yvcVZ_-1KLf9U",
+        authDomain: "test-99c0b.firebaseapp.com",
+        projectId: "test-99c0b",
+        storageBucket: "test-99c0b.firebasestorage.app",
+        messagingSenderId: "452101951551",
+        appId: "1:452101951551:web:25936ad6e8c9a53ec8e88a"
+    };
+
+    // Firebase 초기화
+    const app = firebase.initializeApp(firebaseConfig);
+
+    // FCM 인스턴스 생성
+    const messaging = firebase.messaging();
+
+    // 서비스 워커 등록
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                messaging.useServiceWorker(registration); // 메시징과 서비스 워커 연결
+            })
+            .catch((err) => {
+                console.error('Service Worker registration failed:', err);
+            });
+    } else {
+        console.error('Service Worker is not supported in this browser.');
+    }
+
+    // 알림 권한 요청 및 토큰 출력
+    messaging.requestPermission()
+        .then(() => {
+            console.log("Notification permission granted.");
+            return messaging.getToken();  // FCM 토큰 받기
+        })
+        .then((token) => {
+            console.log("FCM Token:", token);
+
+            // HTML 요소에 토큰 출력
+            document.getElementById("fcmToken").textContent = token;
+
+            // 서버로 토큰 전송 (옵션)
+            // 예: fetch('/save-token', { method: 'POST', body: JSON.stringify({ token }) });
+        })
+        .catch((err) => {
+            console.error("Unable to get permission to notify.", err);
+            document.getElementById("fcmToken").textContent = "토큰을 가져오지 못했습니다.";
+        });
+
+    // 푸시 알림 수신
+    messaging.onMessage((payload) => {
+        console.log("Message received. ", payload);
+
+        // 푸시 알림 표시 (예: 브라우저 알림)
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+            body: payload.notification.body,
+            icon: payload.notification.icon
+        };
+
+        // HTML 요소에 알림 출력
+        document.getElementById("pushTitle").textContent = payload.notification.title;
+        document.getElementById("pushBody").textContent = payload.notification.body;
+
+        // 브라우저에서 알림 표시
+        new Notification(notificationTitle, notificationOptions);
+    });
+</script>
+
+</body>
+</html>
