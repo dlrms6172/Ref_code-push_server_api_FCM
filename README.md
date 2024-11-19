@@ -24,4 +24,4 @@
         - [index.html](src%2Fmain%2Fresources%2Ftemplates%2Findex.html) : 디바이스 토큰 출력,알림 수신하여 화면에 표시하는 페이지
       - [fcm.json](src%2Fmain%2Fresources%2Ffcm.json) : fcm admin sdk
 #### 3.project description
-해당 프로젝트는 FCM(Firebase Cloud Messaging)의 REST API를 학습하고, 이를 간단히 참고할 수 있도록 제작되었습니다.(화면은 단순히 확인용도로 제작, 서버쪽 코드 참고!)
+해당 프로젝트는 FCM(Firebase Cloud Messaging)의 REST API를 학습하고, 이를 간단히 참고할 수 있도록 제작되었습니다.(화면은 단순히 확인용도로 제작)
