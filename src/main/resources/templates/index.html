@@ -23,6 +23,8 @@
 <div id="pushBody" style="word-wrap: break-word; max-width: 100%; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
     내용 ~
 </div>
+<p><b>알림 이미지 :</b></p>
+<img id="pushImage" style="max-width: 300px; border: 1px solid #ccc; display: none;" />
 
 <script>
     // Firebase 설정
@@ -79,18 +81,29 @@
     messaging.onMessage((payload) => {
         console.log("Message received. ", payload);
 
-        // 푸시 알림 표시 (예: 브라우저 알림)
+        // 푸시 알림 데이터
         const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-            body: payload.notification.body,
-            icon: payload.notification.icon
-        };
+        const notificationBody = payload.notification.body;
+        const notificationImage = payload.notification.image; // 이미지 URL
 
-        // HTML 요소에 알림 출력
-        document.getElementById("pushTitle").textContent = payload.notification.title;
-        document.getElementById("pushBody").textContent = payload.notification.body;
+        // HTML 요소 업데이트
+        document.getElementById("pushTitle").textContent = notificationTitle;
+        document.getElementById("pushBody").textContent = notificationBody;
+
+        // 이미지 표시 (있을 경우)
+        if (notificationImage) {
+            const pushImage = document.getElementById("pushImage");
+            pushImage.src = notificationImage; // 이미지 URL 설정
+            pushImage.style.display = "block"; // 이미지 표시
+        } else {
+            document.getElementById("pushImage").style.display = "none"; // 이미지 숨기기
+        }
 
         // 브라우저에서 알림 표시
+        const notificationOptions = {
+            body: notificationBody,
+            image: notificationImage
+        };
         new Notification(notificationTitle, notificationOptions);
     });
 </script>

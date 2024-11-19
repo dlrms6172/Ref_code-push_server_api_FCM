@@ -16,7 +16,7 @@
             - controller
               - [NotificationController.java](src%2Fmain%2Fjava%2Fcom%2Fspringboot%2Fref_code%2Fcontroller%2FNotificationController.java) : 클라이언트에서 얻은 토큰과 제목,내용을 지정해서 알림을 보내는 클래스
             - service
-              - [FcmService.java](src%2Fmain%2Fjava%2Fcom%2Fspringboot%2Fref_code%2Fservice%2FFcmService.java) : Firebase Cloud Messaging의 비즈니스 로직을 처리하는 서비스 클래스(웹)
+              - [FcmService.java](src%2Fmain%2Fjava%2Fcom%2Fspringboot%2Fref_code%2Fservice%2FFcmService.java) : Firebase Cloud Messaging의 비즈니스 로직을 처리하는 서비스 클래스
     - resouces
       - static
         - [firebase-messaging-sw.js](src%2Fmain%2Fresources%2Fstatic%2Ffirebase-messaging-sw.js) : 푸시 알림을 받을 수 있게 설정하는 Service Worker 
